@@ -1,6 +1,6 @@
 "use client"
 
-import { Bar, BarChart, CartesianGrid, Pie, PieChart, Cell, Line, LineChart, Tooltip as RechartsTooltip, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, Pie, PieChart, Cell, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart"
 import { Flame, Target, Weight } from "lucide-react"
@@ -149,7 +149,7 @@ export default function DashboardPage() {
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
                         <XAxis dataKey="week" tickFormatter={(value) => `Week ${value}`} />
                         <YAxis domain={['dataMin - 5', 'dataMax + 5']} allowDecimals={false} unit=" lbs" />
-                        <RechartsTooltip />
+                        <Tooltip />
                         <Line type="monotone" dataKey="weight" stroke="var(--color-weight)" strokeWidth={2} dot={{r: 4}} />
                     </LineChart>
                 </ChartContainer>
