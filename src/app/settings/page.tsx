@@ -43,7 +43,7 @@ const formSchema = z.object({
   activityLevel: z.string().min(1, "Please select your activity level."),
   weightUnit: z.enum(["lbs", "kg"]),
   heightUnit: z.enum(["in", "cm"]),
-})
+});
 
 export default function SettingsPage() {
     const { toast } = useToast();
