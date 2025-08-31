@@ -53,6 +53,12 @@ export default function SignUpPage() {
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log("Sign up values:", values)
         // This is where you'd call your Firebase sign-up function
+        
+        // Simulate saving the user's name
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('userName', values.name);
+        }
+
         toast({
           title: "Sign up successful!",
           description: "Redirecting you to the onboarding page...",

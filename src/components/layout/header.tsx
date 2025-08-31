@@ -34,14 +34,20 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("Alex"); // Simulated user name
+  const [userName, setUserName] = useState("User");
 
   useEffect(() => {
     // Simulate checking auth state. In a real app, this would be a call to a context or a hook.
     // We'll consider the user "logged in" if they are on a page other than the auth pages.
-    const authPages = ["/signin", "/signup", "/onboarding"];
+    const authPages = ["/signin", "/signup"];
     if (!authPages.includes(pathname) && pathname !== "/") {
         setIsLoggedIn(true);
+        if (typeof window !== 'undefined') {
+            const storedName = localStorage.getItem('userName');
+            if (storedName) {
+                setUserName(storedName);
+            }
+        }
     } else {
         setIsLoggedIn(false);
     }
@@ -50,6 +56,9 @@ export function Header() {
   const handleSignOut = () => {
     // In a real app, you'd call your sign-out logic here.
     setIsLoggedIn(false);
+    if (typeof window !== 'undefined') {
+        localStorage.removeItem('userName');
+    }
     router.push("/signin");
   };
 
@@ -87,7 +96,7 @@ export function Header() {
                   <Button variant="ghost" className="relative h-8 w-auto flex items-center gap-2">
                      <span className="text-sm font-medium text-muted-foreground hidden sm:inline">Hi, {userName}!</span>
                     <Avatar className="h-8 w-8">
-                        <AvatarFallback>{userName.charAt(0)}</AvatarFallback>
+                        <AvatarFallback>{userName.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -96,7 +105,7 @@ export function Header() {
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium leading-none">{userName}</p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        {userName.toLowerCase()}@example.com
+                        {userName.toLowerCase().replace(' ', '.')}@example.com
                       </p>
                     </div>
                   </DropdownMenuLabel>
