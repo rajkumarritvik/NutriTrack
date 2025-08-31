@@ -116,7 +116,7 @@ export default function Home() {
                 </ul>
                 <div className="flex justify-center lg:justify-start">
                     <Image
-                        src="https://picsum.photos/200/200"
+                        src="https://i.imgur.com/OcSuqZC.png"
                         width={200}
                         height={200}
                         alt="QR Code"
