@@ -37,7 +37,7 @@ export default function DashboardPage() {
     { name: 'Fat', value: macros.fat, fill: 'var(--color-fat)' },
   ];
 
-  const noMealsTracked = !stats || stats.avgCalories === 0;
+  const noMealsTracked = !stats || stats.todaysCalories === 0;
 
   return (
     <div className="container py-12">
@@ -51,7 +51,7 @@ export default function DashboardPage() {
           <Zap className="h-4 w-4" />
           <AlertTitle>Welcome to your Dashboard!</AlertTitle>
           <AlertDescription>
-            You haven't tracked any meals yet. Go to the <a href="/meal-counter" className="font-semibold underline">Meal Counter</a> page to get started.
+            You haven't tracked any meals yet today. Go to the <a href="/meal-counter" className="font-semibold underline">Meal Counter</a> page to get started.
           </AlertDescription>
         </Alert>
       )}
@@ -132,7 +132,7 @@ export default function DashboardPage() {
             <CardHeader>
                 <CardTitle className="font-headline">Weight Tracking</CardTitle>
                 <CardDescription>Your weight progress over the last few weeks.</CardDescription>
-            </CardHeader>
+            </Header>
             <CardContent>
                 <ChartContainer config={{weight: {label: "Weight", color: "hsl(var(--chart-1))"}}} className="h-[250px] w-full">
                     <LineChart data={weightProgress} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>

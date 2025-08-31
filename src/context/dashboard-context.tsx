@@ -35,6 +35,7 @@ interface DashboardData {
   macros: Macros;
   weightProgress: WeightProgress[];
   stats: Stats;
+  lastUpdated: string; // ISO date string
 }
 
 interface DashboardContextType {
@@ -46,6 +47,7 @@ interface DashboardContextType {
 const CALORIE_GOAL = 2500;
 const dayMap = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+const getTodayDateString = () => new Date().toISOString().split('T')[0];
 
 // Initial state
 const getInitialState = (): DashboardData => {
@@ -61,7 +63,8 @@ const getInitialState = (): DashboardData => {
         weightChange: 0,
         daysGoalMet: 0,
         todaysCalories: 0,
-    }
+    },
+    lastUpdated: getTodayDateString()
   };
 };
 
@@ -83,7 +86,20 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
     try {
       const storedData = localStorage.getItem('dashboardData');
       if (storedData) {
-        const parsedData = JSON.parse(storedData);
+        const parsedData: DashboardData = JSON.parse(storedData);
+        
+        // Reset daily calories and macros if it's a new day
+        const today = getTodayDateString();
+        if (parsedData.lastUpdated !== today) {
+            const todayStr = dayMap[new Date().getDay()];
+            const dayIndex = parsedData.dailyCalories.findIndex(d => d.day === todayStr);
+            if (dayIndex !== -1) {
+                parsedData.dailyCalories[dayIndex].calories = 0;
+            }
+            parsedData.macros = { protein: 0, carbs: 0, fat: 0 };
+            parsedData.lastUpdated = today;
+        }
+
         // Basic validation to ensure data shape is correct
         if (parsedData.dailyCalories && parsedData.macros && parsedData.weightProgress) {
              setDashboardData(parsedData);
@@ -142,7 +158,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
       const today = new Date().getDay(); // 0 = Sunday, 1 = Monday...
       const todayStr = dayMap[today];
       
-      const newDailyCalories = [...prevData.dailyCalories];
+      const newDailyCalories = [...prevData.dailycalories];
       const dayIndex = newDailyCalories.findIndex(d => d.day === todayStr);
 
       if (dayIndex !== -1) {
@@ -159,6 +175,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
         ...prevData,
         dailyCalories: newDailyCalories,
         macros: newMacros,
+        lastUpdated: getTodayDateString(),
       };
     });
   };
