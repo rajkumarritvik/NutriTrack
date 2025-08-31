@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { aiMealInput, type AiMealOutputType } from "@/ai/flows/ai-meal-input";
-import { updateDashboardWithMeal } from "@/ai/flows/update-dashboard-with-meal";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DashboardContext } from "@/context/dashboard-context";
 
 const formSchema = z.object({
   mealDescription: z.string().optional(),
@@ -37,6 +37,7 @@ export default function MealCounterPage() {
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("text");
+  const { addMeal } = useContext(DashboardContext);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -137,7 +138,7 @@ export default function MealCounterPage() {
       if(!nutritionData) return;
       setIsUpdatingDashboard(true);
       try {
-          await updateDashboardWithMeal({mealData: nutritionData});
+          addMeal(nutritionData);
           setDashboardUpdated(true);
           toast({
               title: "Dashboard Updated!",
@@ -356,5 +357,3 @@ export default function MealCounterPage() {
     </div>
   );
 }
-
-    

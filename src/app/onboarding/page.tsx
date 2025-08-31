@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useForm } from "react-hook-form"
@@ -31,7 +30,8 @@ import {
 } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { saveUserProfile } from "@/ai/flows/save-user-profile"
+import { useContext } from "react"
+import { DashboardContext } from "@/context/dashboard-context"
 
 const genders = ["Male", "Female", "Prefer not to say"];
 const activityLevels = ["Sedentary", "Lightly Active", "Moderately Active", "Very Active", "Extra Active"];
@@ -48,6 +48,8 @@ const formSchema = z.object({
 export default function OnboardingPage() {
     const { toast } = useToast();
     const router = useRouter();
+    const { setInitialWeight } = useContext(DashboardContext);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,7 +66,13 @@ export default function OnboardingPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Onboarding data:", values)
     try {
-      await saveUserProfile({ profileData: values });
+      // In a real app this would be an API call
+      let weightInLbs = values.weight;
+      if (values.weightUnit === 'kg') {
+          weightInLbs = values.weight * 2.20462;
+      }
+      setInitialWeight(weightInLbs);
+
       toast({
         title: "Profile saved!",
         description: "You're all set up. Welcome to NutriTrackGo!",
