@@ -7,7 +7,8 @@ const firebaseConfig = {
   "storageBucket": "nutritrackgo-nvldr.firebasestorage.app",
   "apiKey": "AIzaSyBRtns8f4qKFlFXX4_rL_t4fA8h3v3JnP4",
   "authDomain": "nutritrackgo-nvldr.firebaseapp.com",
-  "messagingSenderId": "223092470506"
+  "messagingSenderId": "223092470506",
+  "measurementId": ""
 };
 
 // Initialize Firebase
