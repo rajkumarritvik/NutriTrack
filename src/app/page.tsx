@@ -14,7 +14,7 @@ export default function Home() {
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline text-primary">
-                    Meet NutriTrackGo: Your AI Nutritionist
+                    Meet NutriTrack: Your AI Nutritionist
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
                     Effortlessly track your meals, get personalized diet plans, and visualize your progress. Take control of your health with the power of AI.
@@ -102,7 +102,7 @@ export default function Home() {
                 Ready to Transform Your Health?
               </h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Join thousands of users who are already achieving their fitness goals with NutriTrackGo. Get started for free today.
+                Join thousands of users who are already achieving their fitness goals with NutriTrack. Get started for free today.
               </p>
             </div>
             <div className="mx-auto w-full max-w-sm space-y-2">

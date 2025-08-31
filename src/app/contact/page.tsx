@@ -72,8 +72,8 @@ export default function ContactPage() {
             </Card>
           <div className="mt-4 text-center text-sm">
             You can also reach us at{" "}
-            <a href="mailto:support@nutritrackgo.com" className="underline">
-              support@nutritrackgo.com
+            <a href="mailto:support@nutritrack.com" className="underline">
+              support@nutritrack.com
             </a>
           </div>
         </div>

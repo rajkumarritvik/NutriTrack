@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'NutriTrackGo - AI Nutrition Planner',
+  title: 'NutriTrack - AI Nutrition Planner',
   description: 'Your personal AI-powered nutrition planner to track calories, macros, and get custom diet plans.',
 };
 

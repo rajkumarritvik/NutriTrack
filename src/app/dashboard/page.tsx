@@ -21,35 +21,34 @@ const barChartConfig: ChartConfig = {
 }
 
 const macros = {
-    protein: 120,
-    carbs: 250,
-    fat: 60,
+  protein: 120,
+  carbs: 250,
+  fat: 60,
 }
 
 const pieChartConfig: ChartConfig = {
-    grams: { label: "Grams" },
-    protein: { label: "Protein", color: "hsl(var(--chart-1))" },
-    carbs: { label: "Carbs", color: "hsl(var(--chart-2))" },
-    fat: { label: "Fat", color: "hsl(var(--chart-3))" }
+  grams: { label: "Grams" },
+  protein: { label: "Protein", color: "hsl(var(--chart-1))" },
+  carbs: { label: "Carbs", color: "hsl(var(--chart-2))" },
+  fat: { label: "Fat", color: "hsl(var(--chart-3))" },
 }
 
 const macrosData = [
-    { name: 'Protein', value: macros.protein },
-    { name: 'Carbs', value: macros.carbs },
-    { name: 'Fat', value: macros.fat },
+  { name: "Protein", value: macros.protein },
+  { name: "Carbs", value: macros.carbs },
+  { name: "Fat", value: macros.fat },
 ]
 
 const weightProgress = [
-    { week: 1, weight: 155 },
-    { week: 2, weight: 154 },
-    { week: 3, weight: 154 },
-    { week: 4, weight: 153 },
-    { week: 5, weight: 152 },
-    { week: 6, weight: 151 },
+  { week: 1, weight: 155 },
+  { week: 2, weight: 154 },
+  { week: 3, weight: 154 },
+  { week: 4, weight: 153 },
+  { week: 5, weight: 152 },
+  { week: 6, weight: 151 },
 ]
 
 export default function DashboardPage() {
-
   return (
     <div className="container py-12">
       <div className="space-y-2 mb-8">
@@ -57,39 +56,43 @@ export default function DashboardPage() {
         <p className="text-muted-foreground">An overview of your week's progress and nutrition.</p>
       </div>
 
+      {/* Summary cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Avg. Daily Calories</CardTitle>
-                <Flame className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-                <div className="text-2xl font-bold">2042</div>
-                <p className="text-xs text-muted-foreground">2.1% vs goal</p>
-            </CardContent>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Avg. Daily Calories</CardTitle>
+            <Flame className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">2042</div>
+            <p className="text-xs text-muted-foreground">2.1% vs goal</p>
+          </CardContent>
         </Card>
+
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Weight Progress</CardTitle>
-                <Weight className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-                <div className="text-2xl font-bold">151 lbs</div>
-                <p className="text-xs text-muted-foreground">-4 lbs change</p>
-            </CardContent>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Weight Progress</CardTitle>
+            <Weight className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">151 lbs</div>
+            <p className="text-xs text-muted-foreground">-4 lbs change</p>
+          </CardContent>
         </Card>
-         <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Weekly Goal</CardTitle>
-                <Target className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-                <div className="text-2xl font-bold">4/7 Days Met</div>
-                <p className="text-xs text-muted-foreground">You're on the right track!</p>
-            </CardContent>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Weekly Goal</CardTitle>
+            <Target className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">4/7 Days Met</div>
+            <p className="text-xs text-muted-foreground">You're on the right track!</p>
+          </CardContent>
         </Card>
       </div>
 
+      {/* Charts row */}
       <div className="grid gap-6 mt-6 md:grid-cols-2 lg:grid-cols-5">
         <Card className="lg:col-span-3">
           <CardHeader>
@@ -108,42 +111,46 @@ export default function DashboardPage() {
             </ChartContainer>
           </CardContent>
         </Card>
+
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="font-headline">Today's Macros</CardTitle>
             <CardDescription>Breakdown of protein, carbs, and fat.</CardDescription>
           </CardHeader>
           <CardContent className="flex-1 pb-0">
-             <ChartContainer config={pieChartConfig} className="mx-auto aspect-square h-[250px]">
-                <PieChart>
-                  <ChartTooltip content={<ChartTooltipContent nameKey="name" hideLabel />} />
-                  <Pie data={macrosData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5} />
-                </PieChart>
+            <ChartContainer config={pieChartConfig} className="mx-auto aspect-square h-[250px]">
+              <PieChart>
+                <ChartTooltip content={<ChartTooltipContent nameKey="name" hideLabel />} />
+                <Pie data={macrosData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5} />
+              </PieChart>
             </ChartContainer>
           </CardContent>
         </Card>
       </div>
-      
+
+      {/* Weight tracking line chart */}
       <div className="grid gap-6 mt-6">
         <Card>
-            <CardHeader>
-                <CardTitle className="font-headline">Weight Tracking</CardTitle>
-                <CardDescription>Your weight progress over the last few weeks.</CardDescription>
-            </Header>
-            <CardContent>
-                <ChartContainer config={{weight: {label: "Weight", color: "hsl(var(--chart-1))"}}} className="h-[250px] w-full">
-                    <LineChart data={weightProgress} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="week" tickFormatter={(value) => `Week ${value}`} />
-                        <YAxis domain={['dataMin - 5', 'dataMax + 5']} allowDecimals={false} unit=" lbs" />
-                        <Tooltip />
-                        <Line type="monotone" dataKey="weight" stroke="var(--color-weight)" strokeWidth={2} dot={{r: 4}} />
-                    </LineChart>
-                </ChartContainer>
-            </CardContent>
+          <CardHeader>
+            <CardTitle className="font-headline">Weight Tracking</CardTitle>
+            <CardDescription>Your weight progress over the last few weeks.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer
+              config={{ weight: { label: "Weight", color: "hsl(var(--chart-1))" } }}
+              className="h-[250px] w-full"
+            >
+              <LineChart data={weightProgress} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="week" tickFormatter={(value) => `Week ${value}`} />
+                <YAxis domain={["dataMin - 5", "dataMax + 5"]} allowDecimals={false} unit=" lbs" />
+                <Tooltip />
+                <Line type="monotone" dataKey="weight" stroke="var(--color-weight)" strokeWidth={2} dot={{ r: 4 }} />
+              </LineChart>
+            </ChartContainer>
+          </CardContent>
         </Card>
       </div>
-
     </div>
   )
 }

@@ -67,7 +67,7 @@ export default function OnboardingPage() {
       await saveUserProfile(values);
       toast({
         title: "Profile saved!",
-        description: "You're all set up. Welcome to NutriTrackGo!",
+        description: "You're all set up. Welcome to NutriTrack!",
       });
       router.push("/dashboard");
     } catch (error) {

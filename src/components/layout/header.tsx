@@ -76,7 +76,7 @@ export function Header() {
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Leaf className="h-6 w-6 text-primary" />
             <span className="hidden font-bold sm:inline-block font-headline">
-              NutriTrackGo
+              NutriTrack
             </span>
           </Link>
           <nav className="hidden items-center gap-6 text-sm md:flex">
@@ -142,7 +142,7 @@ export function Header() {
             <SheetContent side="left" className="pr-0">
                 <Link href="/" className="flex items-center space-x-2 mb-6">
                 <Leaf className="h-6 w-6 text-primary" />
-                <span className="font-bold font-headline">NutriTrackGo</span>
+                <span className="font-bold font-headline">NutriTrack</span>
                 </Link>
                 <div className="flex flex-col space-y-4 pl-2">
                 {navLinks.map((link) => (

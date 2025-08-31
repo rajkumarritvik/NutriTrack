@@ -14,7 +14,7 @@ export default function AboutPage() {
                 The Future of Nutrition is Here
               </h1>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed">
-                NutriTrackGo was born from a simple idea: nutrition tracking should be easy, intelligent, and accessible to everyone. We're a team of developers, designers, and nutrition enthusiasts dedicated to helping you achieve your health goals through technology.
+                NutriTrack was born from a simple idea: nutrition tracking should be easy, intelligent, and accessible to everyone. We're a team of developers, designers, and nutrition enthusiasts dedicated to helping you achieve your health goals through technology.
               </p>
             </div>
             <div className="flex flex-col items-start space-y-4">
@@ -80,7 +80,7 @@ export default function AboutPage() {
             <div className="space-y-4">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Download The App</h2>
                 <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed">
-                    Take NutriTrackGo with you wherever you go. Available now on iOS and Android.
+                    Take NutriTrack with you wherever you go. Available now on iOS and Android.
                 </p>
             </div>
             <div className="mt-8 flex justify-center gap-4 flex-wrap">
