@@ -27,7 +27,6 @@ interface Stats {
     currentWeight: number;
     weightChange: number;
     daysGoalMet: number;
-    todaysCalories: number;
 }
 
 interface DashboardData {
@@ -35,7 +34,6 @@ interface DashboardData {
   macros: Macros;
   weightProgress: WeightProgress[];
   stats: Stats;
-  lastUpdated: string; // ISO date string
 }
 
 interface DashboardContextType {
@@ -44,29 +42,29 @@ interface DashboardContextType {
   setInitialWeight: (weight: number) => void;
 }
 
-const CALORIE_GOAL = 2500;
-const dayMap = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-const getTodayDateString = () => new Date().toISOString().split('T')[0];
+const CALORIE_GOAL = 2000;
 
 // Initial state
-const getInitialState = (): DashboardData => {
-  const emptyDailyCalories = dayMap.map(day => ({ day, calories: 0, goal: CALORIE_GOAL }));
-  return {
-    dailyCalories: emptyDailyCalories,
-    macros: { protein: 0, carbs: 0, fat: 0 },
-    weightProgress: [],
-    stats: {
-        avgCalories: 0,
-        goalComparison: 0,
-        currentWeight: 0,
-        weightChange: 0,
-        daysGoalMet: 0,
-        todaysCalories: 0,
-    },
-    lastUpdated: getTodayDateString()
-  };
-};
+const getInitialState = (): DashboardData => ({
+  dailyCalories: [
+    { day: "Sun", calories: 0, goal: CALORIE_GOAL },
+    { day: "Mon", calories: 0, goal: CALORIE_GOAL },
+    { day: "Tue", calories: 0, goal: CALORIE_GOAL },
+    { day: "Wed", calories: 0, goal: CALORIE_GOAL },
+    { day: "Thu", calories: 0, goal: CALORIE_GOAL },
+    { day: "Fri", calories: 0, goal: CALORIE_GOAL },
+    { day: "Sat", calories: 0, goal: CALORIE_GOAL },
+  ],
+  macros: { protein: 0, carbs: 0, fat: 0 },
+  weightProgress: [],
+  stats: {
+      avgCalories: 0,
+      goalComparison: 0,
+      currentWeight: 0,
+      weightChange: 0,
+      daysGoalMet: 0,
+  }
+});
 
 // Create context
 export const DashboardContext = createContext<DashboardContextType>({
@@ -86,20 +84,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
     try {
       const storedData = localStorage.getItem('dashboardData');
       if (storedData) {
-        const parsedData: DashboardData = JSON.parse(storedData);
-        
-        // Reset daily calories and macros if it's a new day
-        const today = getTodayDateString();
-        if (parsedData.lastUpdated !== today) {
-            const todayStr = dayMap[new Date().getDay()];
-            const dayIndex = parsedData.dailyCalories.findIndex(d => d.day === todayStr);
-            if (dayIndex !== -1) {
-                parsedData.dailyCalories[dayIndex].calories = 0;
-            }
-            parsedData.macros = { protein: 0, carbs: 0, fat: 0 };
-            parsedData.lastUpdated = today;
-        }
-
+        const parsedData = JSON.parse(storedData);
         // Basic validation to ensure data shape is correct
         if (parsedData.dailyCalories && parsedData.macros && parsedData.weightProgress) {
              setDashboardData(parsedData);
@@ -129,9 +114,6 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
   }, [dashboardData, isInitialized]);
   
   const calculateStats = (data: DashboardData): Stats => {
-      const todayStr = dayMap[new Date().getDay()];
-      const todaysCalories = data.dailyCalories.find(d => d.day === todayStr)?.calories || 0;
-      
       const trackedDays = data.dailyCalories.filter(d => d.calories > 0);
       const avgCalories = trackedDays.length > 0 ? trackedDays.reduce((acc, day) => acc + day.calories, 0) / trackedDays.length : 0;
       const goalComparison = CALORIE_GOAL > 0 ? ((avgCalories - CALORIE_GOAL) / CALORIE_GOAL) * 100 : 0;
@@ -143,7 +125,6 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
       const daysGoalMet = data.dailyCalories.filter(d => d.calories > 0 && d.calories <= d.goal).length;
 
       return {
-          todaysCalories,
           avgCalories,
           goalComparison,
           currentWeight,
@@ -156,14 +137,9 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
   const addMeal = (meal: AiMealOutputType) => {
     setDashboardData(prevData => {
       const today = new Date().getDay(); // 0 = Sunday, 1 = Monday...
-      const todayStr = dayMap[today];
       
-      const newDailyCalories = [...prevData.dailycalories];
-      const dayIndex = newDailyCalories.findIndex(d => d.day === todayStr);
-
-      if (dayIndex !== -1) {
-        newDailyCalories[dayIndex].calories += meal.calories;
-      }
+      const newDailyCalories = [...prevData.dailyCalories];
+      newDailyCalories[today].calories += meal.calories;
 
       const newMacros = {
         protein: prevData.macros.protein + meal.protein,
@@ -175,7 +151,6 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
         ...prevData,
         dailyCalories: newDailyCalories,
         macros: newMacros,
-        lastUpdated: getTodayDateString(),
       };
     });
   };
