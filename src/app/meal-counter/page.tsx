@@ -15,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   mealDescription: z.string().optional(),
@@ -24,12 +25,15 @@ const formSchema = z.object({
     path: ['mealDescription'],
 });
 
+type MealEntry = AiMealOutputType & { date: string };
+
 export default function MealCounterPage() {
   const [nutritionData, setNutritionData] = useState<AiMealOutputType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdatingDashboard, setIsUpdatingDashboard] = useState(false);
   const [dashboardUpdated, setDashboardUpdated] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -136,19 +140,33 @@ export default function MealCounterPage() {
       if(!nutritionData) return;
       setIsUpdatingDashboard(true);
       try {
-          // This is a placeholder for a real dashboard update
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          setDashboardUpdated(true);
-          toast({
-              title: "Dashboard Updated!",
-              description: "Your meal has been added to your dashboard.",
-          })
+        const mealEntry: MealEntry = {
+            ...nutritionData,
+            date: new Date().toISOString(),
+        }
+
+        const storedHistory = localStorage.getItem("mealHistory");
+        const history: MealEntry[] = storedHistory ? JSON.parse(storedHistory) : [];
+        history.push(mealEntry);
+        localStorage.setItem("mealHistory", JSON.stringify(history));
+        
+        setDashboardUpdated(true);
+        toast({
+            title: "Dashboard Updated!",
+            description: "Your meal has been added. Redirecting to dashboard...",
+        });
+
+        // Redirect after a short delay
+        setTimeout(() => {
+            router.push("/dashboard");
+        }, 1500)
+
       } catch (error) {
           console.error(error);
           toast({
               variant: "destructive",
               title: "Update Failed",
-              description: "Could not update the dashboard. Please try again.",
+              description: "Could not save your meal. Please try again.",
           })
       } finally {
           setIsUpdatingDashboard(false);
@@ -341,7 +359,7 @@ export default function MealCounterPage() {
                 {dashboardUpdated ? (
                     <Button disabled className="w-full">
                         <CheckCircle2 className="mr-2 h-4 w-4" />
-                        Dashboard Updated
+                        Added to Dashboard!
                     </Button>
                 ) : (
                     <Button onClick={handleUpdateDashboard} disabled={isUpdatingDashboard} className="w-full">

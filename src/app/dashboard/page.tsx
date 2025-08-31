@@ -1,44 +1,28 @@
 "use client"
 
-import { Bar, BarChart, CartesianGrid, Pie, PieChart, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
+import { useEffect, useState } from "react"
+import { Bar, BarChart, CartesianGrid, Pie, PieChart as RechartsPieChart, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart"
-import { Flame, Target, Weight } from "lucide-react"
+import { Flame, Target, Weight, Pizza } from "lucide-react"
+import type { AiMealOutputType } from "@/ai/flows/ai-meal-input"
+import { addDays, format, startOfWeek, isSameDay } from 'date-fns';
 
-const dailyCalories = [
-  { day: "Sun", calories: 1800, goal: 2000 },
-  { day: "Mon", calories: 1950, goal: 2000 },
-  { day: "Tue", calories: 2100, goal: 2000 },
-  { day: "Wed", calories: 2050, goal: 2000 },
-  { day: "Thu", calories: 1900, goal: 2000 },
-  { day: "Fri", calories: 2200, goal: 2000 },
-  { day: "Sat", calories: 2300, goal: 2000 },
-]
+type MealEntry = AiMealOutputType & { date: string };
 
 const barChartConfig: ChartConfig = {
   calories: { label: "Calories", color: "hsl(var(--chart-1))" },
   goal: { label: "Goal", color: "hsl(var(--border))" },
-}
-
-const macros = {
-  protein: 120,
-  carbs: 250,
-  fat: 60,
-}
+};
 
 const pieChartConfig: ChartConfig = {
   grams: { label: "Grams" },
   protein: { label: "Protein", color: "hsl(var(--chart-1))" },
   carbs: { label: "Carbs", color: "hsl(var(--chart-2))" },
   fat: { label: "Fat", color: "hsl(var(--chart-3))" },
-}
+};
 
-const macrosData = [
-  { name: "Protein", value: macros.protein },
-  { name: "Carbs", value: macros.carbs },
-  { name: "Fat", value: macros.fat },
-]
-
+// Weight progress remains static for now as it's not part of the meal counter.
 const weightProgress = [
   { week: 1, weight: 155 },
   { week: 2, weight: 154 },
@@ -46,9 +30,71 @@ const weightProgress = [
   { week: 4, weight: 153 },
   { week: 5, weight: 152 },
   { week: 6, weight: 151 },
-]
+];
+const lastWeight = weightProgress[weightProgress.length - 1]?.weight || 0;
+const weightChange = lastWeight - (weightProgress[0]?.weight || 0);
+
 
 export default function DashboardPage() {
+  const [mealHistory, setMealHistory] = useState<MealEntry[]>([]);
+
+  useEffect(() => {
+    const storedHistory = localStorage.getItem("mealHistory");
+    if (storedHistory) {
+      setMealHistory(JSON.parse(storedHistory));
+    }
+  }, []);
+
+  const today = new Date();
+  const startOfCurrentWeek = startOfWeek(today);
+
+  // Calculate daily calories for the current week
+  const weeklyCalories = Array.from({ length: 7 }).map((_, i) => {
+      const day = addDays(startOfCurrentWeek, i);
+      const calories = mealHistory
+        .filter(meal => isSameDay(new Date(meal.date), day))
+        .reduce((sum, meal) => sum + meal.calories, 0);
+      return {
+          day: format(day, 'E'),
+          calories: calories,
+          goal: 2000,
+      };
+  });
+  
+  const daysGoalMet = weeklyCalories.filter(d => d.calories > 0 && d.calories <= d.goal).length;
+
+  const totalCalories = mealHistory.reduce((sum, meal) => sum + meal.calories, 0);
+  const avgDailyCalories = mealHistory.length > 0 ? Math.round(totalCalories / mealHistory.length) : 0;
+  
+  // Calculate today's macros
+  const todaysMacros = mealHistory
+    .filter(meal => isSameDay(new Date(meal.date), today))
+    .reduce((acc, meal) => ({
+      protein: acc.protein + meal.protein,
+      carbs: acc.carbs + meal.carbs,
+      fat: acc.fat + meal.fat,
+    }), { protein: 0, carbs: 0, fat: 0 });
+
+  const macrosData = [
+    { name: "Protein", value: todaysMacros.protein, fill: "var(--color-protein)" },
+    { name: "Carbs", value: todaysMacros.carbs, fill: "var(--color-carbs)" },
+    { name: "Fat", value: todaysMacros.fat, fill: "var(--color-fat)" },
+  ];
+
+  if (mealHistory.length === 0) {
+      return (
+          <div className="container py-12 text-center">
+               <div className="mx-auto max-w-lg">
+                    <Pizza className="mx-auto h-12 w-12 text-muted-foreground" />
+                    <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl font-headline">Your Dashboard is Empty</h1>
+                    <p className="mt-4 text-muted-foreground">
+                        It looks like you haven't logged any meals yet. Head over to the Meal Counter to add your first meal and see your progress here!
+                    </p>
+               </div>
+          </div>
+      )
+  }
+
   return (
     <div className="container py-12">
       <div className="space-y-2 mb-8">
@@ -60,12 +106,12 @@ export default function DashboardPage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg. Daily Calories</CardTitle>
+            <CardTitle className="text-sm font-medium">Avg. Meal Calories</CardTitle>
             <Flame className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2042</div>
-            <p className="text-xs text-muted-foreground">2.1% vs goal</p>
+            <div className="text-2xl font-bold">{avgDailyCalories}</div>
+            <p className="text-xs text-muted-foreground">Based on {mealHistory.length} meals logged</p>
           </CardContent>
         </Card>
 
@@ -75,8 +121,8 @@ export default function DashboardPage() {
             <Weight className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">151 lbs</div>
-            <p className="text-xs text-muted-foreground">-4 lbs change</p>
+            <div className="text-2xl font-bold">{lastWeight} lbs</div>
+            <p className="text-xs text-muted-foreground">{weightChange} lbs change</p>
           </CardContent>
         </Card>
 
@@ -86,7 +132,7 @@ export default function DashboardPage() {
             <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4/7 Days Met</div>
+            <div className="text-2xl font-bold">{daysGoalMet}/7 Days Met</div>
             <p className="text-xs text-muted-foreground">You're on the right track!</p>
           </CardContent>
         </Card>
@@ -101,7 +147,7 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <ChartContainer config={barChartConfig} className="h-[300px] w-full">
-              <BarChart data={dailyCalories} accessibilityLayer>
+              <BarChart data={weeklyCalories} accessibilityLayer>
                 <CartesianGrid vertical={false} />
                 <XAxis dataKey="day" tickLine={false} tickMargin={10} axisLine={false} />
                 <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
@@ -119,10 +165,10 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="flex-1 pb-0">
             <ChartContainer config={pieChartConfig} className="mx-auto aspect-square h-[250px]">
-              <PieChart>
+              <RechartsPieChart>
                 <ChartTooltip content={<ChartTooltipContent nameKey="name" hideLabel />} />
-                <Pie data={macrosData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5} />
-              </PieChart>
+                <RechartsPieChart data={macrosData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5} />
+              </RechartsPieChart>
             </ChartContainer>
           </CardContent>
         </Card>
