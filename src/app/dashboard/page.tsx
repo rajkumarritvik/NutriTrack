@@ -1,6 +1,6 @@
 "use client"
 
-import { Bar, BarChart, CartesianGrid, Pie, PieChart, Cell, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, Pie, PieChart, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart"
 import { Flame, Target, Weight } from "lucide-react"
@@ -34,9 +34,9 @@ const pieChartConfig: ChartConfig = {
 }
 
 const macrosData = [
-    { name: 'Protein', value: macros.protein, fill: 'var(--color-protein)' },
-    { name: 'Carbs', value: macros.carbs, fill: 'var(--color-carbs)' },
-    { name: 'Fat', value: macros.fat, fill: 'var(--color-fat)' },
+    { name: 'Protein', value: macros.protein },
+    { name: 'Carbs', value: macros.carbs },
+    { name: 'Fat', value: macros.fat },
 ];
 
 const weightProgress = [
@@ -126,11 +126,7 @@ export default function DashboardPage() {
              <ChartContainer config={pieChartConfig} className="mx-auto aspect-square h-[250px]">
                 <PieChart>
                   <ChartTooltip content={<ChartTooltipContent nameKey="name" hideLabel />} />
-                  <Pie data={macrosData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5} >
-                    {macrosData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
+                  <Pie data={macrosData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5} />
                 </PieChart>
             </ChartContainer>
           </CardContent>
