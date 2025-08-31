@@ -26,6 +26,9 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
 
 const formSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
   email: z.string().email({
     message: "Please enter a valid email.",
   }),
@@ -41,6 +44,7 @@ export default function SignUpPage() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+          name: "",
           email: "",
           password: "",
         },
@@ -68,6 +72,19 @@ export default function SignUpPage() {
         <CardContent className="grid gap-4">
             <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                        <Input placeholder="Your Name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
                 <FormField
                     control={form.control}
                     name="email"
