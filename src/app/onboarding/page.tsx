@@ -52,8 +52,8 @@ export default function OnboardingPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      weight: undefined,
-      height: undefined,
+      weight: "" as any,
+      height: "" as any,
       gender: "",
       activityLevel: "",
       weightUnit: "lbs",
