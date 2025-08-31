@@ -27,6 +27,7 @@ interface Stats {
     currentWeight: number;
     weightChange: number;
     daysGoalMet: number;
+    todaysCalories: number;
 }
 
 interface DashboardData {
@@ -42,7 +43,7 @@ interface DashboardContextType {
   setInitialWeight: (weight: number) => void;
 }
 
-const CALORIE_GOAL = 2000;
+const CALORIE_GOAL = 2500;
 const dayMap = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 
@@ -59,6 +60,7 @@ const getInitialState = (): DashboardData => {
         currentWeight: 0,
         weightChange: 0,
         daysGoalMet: 0,
+        todaysCalories: 0,
     }
   };
 };
@@ -111,6 +113,9 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
   }, [dashboardData, isInitialized]);
   
   const calculateStats = (data: DashboardData): Stats => {
+      const todayStr = dayMap[new Date().getDay()];
+      const todaysCalories = data.dailyCalories.find(d => d.day === todayStr)?.calories || 0;
+      
       const trackedDays = data.dailyCalories.filter(d => d.calories > 0);
       const avgCalories = trackedDays.length > 0 ? trackedDays.reduce((acc, day) => acc + day.calories, 0) / trackedDays.length : 0;
       const goalComparison = CALORIE_GOAL > 0 ? ((avgCalories - CALORIE_GOAL) / CALORIE_GOAL) * 100 : 0;
@@ -122,6 +127,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
       const daysGoalMet = data.dailyCalories.filter(d => d.calories > 0 && d.calories <= d.goal).length;
 
       return {
+          todaysCalories,
           avgCalories,
           goalComparison,
           currentWeight,

@@ -59,12 +59,12 @@ export default function DashboardPage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Avg. Daily Calories</CardTitle>
+                <CardTitle className="text-sm font-medium">Today's Calories</CardTitle>
                 <Flame className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">{stats.avgCalories.toFixed(0)} kcal</div>
-                <p className="text-xs text-muted-foreground">{stats.goalComparison.toFixed(2)}% vs goal</p>
+                <div className="text-2xl font-bold">{stats.todaysCalories.toFixed(0)} <span className="text-sm font-normal text-muted-foreground">/ 2500 kcal</span></div>
+                <p className="text-xs text-muted-foreground">{stats.goalComparison.toFixed(2)}% vs weekly avg</p>
             </CardContent>
         </Card>
         <Card>
@@ -93,7 +93,7 @@ export default function DashboardPage() {
         <Card className="lg:col-span-3">
           <CardHeader>
             <CardTitle className="font-headline">Weekly Calorie Intake</CardTitle>
-            <CardDescription>Calories consumed vs. your daily goal of 2000 kcal.</CardDescription>
+            <CardDescription>Calories consumed vs. your daily goal of 2500 kcal.</CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer config={barChartConfig} className="h-[300px] w-full">
