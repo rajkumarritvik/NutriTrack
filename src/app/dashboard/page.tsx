@@ -1,15 +1,29 @@
 "use client"
 
-import { useContext } from "react"
 import { Bar, BarChart, CartesianGrid, Pie, PieChart, Cell, Line, LineChart, Tooltip as RechartsTooltip, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart"
 import { Flame, Target, Weight } from "lucide-react"
-import { DashboardContext } from "@/context/dashboard-context"
+
+const dailyCalories = [
+  { day: "Sun", calories: 1800, goal: 2000 },
+  { day: "Mon", calories: 1950, goal: 2000 },
+  { day: "Tue", calories: 2100, goal: 2000 },
+  { day: "Wed", calories: 2050, goal: 2000 },
+  { day: "Thu", calories: 1900, goal: 2000 },
+  { day: "Fri", calories: 2200, goal: 2000 },
+  { day: "Sat", calories: 2300, goal: 2000 },
+];
 
 const barChartConfig: ChartConfig = {
   calories: { label: "Calories", color: "hsl(var(--chart-1))" },
   goal: { label: "Goal", color: "hsl(var(--border))" },
+};
+
+const macros = {
+    protein: 120,
+    carbs: 250,
+    fat: 60,
 };
 
 const pieChartConfig: ChartConfig = {
@@ -19,22 +33,31 @@ const pieChartConfig: ChartConfig = {
     fat: { label: "Fat", color: "hsl(var(--chart-3))" },
 };
 
-
-export default function DashboardPage() {
-  const { dashboardData } = useContext(DashboardContext);
-
-  const {
-    dailyCalories,
-    macros,
-    weightProgress,
-    stats,
-  } = dashboardData;
-
-  const macrosData = [
+const macrosData = [
     { name: 'Protein', value: macros.protein, fill: 'var(--color-protein)' },
     { name: 'Carbs', value: macros.carbs, fill: 'var(--color-carbs)' },
     { name: 'Fat', value: macros.fat, fill: 'var(--color-fat)' },
-  ];
+];
+
+const weightProgress = [
+    { week: 1, weight: 155 },
+    { week: 2, weight: 154 },
+    { week: 3, weight: 154 },
+    { week: 4, weight: 153 },
+    { week: 5, weight: 152 },
+    { week: 6, weight: 151 },
+];
+
+const stats = {
+    avgCalories: 2042,
+    goalComparison: 2.1,
+    currentWeight: 151,
+    weightChange: -4,
+    daysGoalMet: 4,
+};
+
+
+export default function DashboardPage() {
 
   return (
     <div className="container py-12">

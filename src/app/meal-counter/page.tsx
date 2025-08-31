@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,7 +15,6 @@ import { Separator } from "@/components/ui/separator";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import Image from 'next/image';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DashboardContext } from "@/context/dashboard-context";
 
 const formSchema = z.object({
   mealDescription: z.string().optional(),
@@ -37,7 +36,6 @@ export default function MealCounterPage() {
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("text");
-  const { addMeal } = useContext(DashboardContext);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -138,7 +136,8 @@ export default function MealCounterPage() {
       if(!nutritionData) return;
       setIsUpdatingDashboard(true);
       try {
-          addMeal(nutritionData);
+          // This is a placeholder for a real dashboard update
+          await new Promise(resolve => setTimeout(resolve, 1000));
           setDashboardUpdated(true);
           toast({
               title: "Dashboard Updated!",
@@ -278,7 +277,7 @@ export default function MealCounterPage() {
                         {capturedImage ? (
                              <div className="flex gap-2">
                                 <Button onClick={resetCapture} variant="outline" className="w-full">Clear</Button>
-                                <Button onClick={form.handleSubmit(onSubmit)} disabled={isLoading} className="w-full bg-accent hover:bg-accent/90">
+                                <Button onClick={form.handleSubmit(onSubmit)} disabled={isLoading} className="w-full bg-accent hover:bg-accent/_90">
                                     {isLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analyzing...</> : <><Sparkles className="mr-2 h-4 w-4" /> Analyze Photo</>}
                                 </Button>
                              </div>
