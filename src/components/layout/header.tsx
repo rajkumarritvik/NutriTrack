@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, Menu, LogOut } from "lucide-react";
+import { Utensils, Menu, LogOut } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
@@ -70,7 +70,7 @@ export function Header() {
       <div className="container flex h-14 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Leaf className="h-6 w-6 text-primary" />
+            <Utensils className="h-6 w-6 text-primary" />
             <span className="hidden font-bold sm:inline-block font-headline">
               NutriTrack
             </span>
@@ -141,7 +141,7 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="left" className="pr-0">
                 <Link href="/" className="flex items-center space-x-2 mb-6">
-                <Leaf className="h-6 w-6 text-primary" />
+                <Utensils className="h-6 w-6 text-primary" />
                 <span className="font-bold font-headline">NutriTrack</span>
                 </Link>
                 <div className="flex flex-col space-y-4 pl-2">
