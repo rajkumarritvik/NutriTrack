@@ -35,6 +35,7 @@ export function Header() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("User");
+  const [userEmail, setUserEmail] = useState("user@example.com");
 
   useEffect(() => {
     // Simulate checking auth state. In a real app, this would be a call to a context or a hook.
@@ -47,6 +48,10 @@ export function Header() {
             if (storedName) {
                 setUserName(storedName);
             }
+            const storedEmail = localStorage.getItem('userEmail');
+            if (storedEmail) {
+                setUserEmail(storedEmail);
+            }
         }
     } else {
         setIsLoggedIn(false);
@@ -58,6 +63,7 @@ export function Header() {
     setIsLoggedIn(false);
     if (typeof window !== 'undefined') {
         localStorage.removeItem('userName');
+        localStorage.removeItem('userEmail');
     }
     router.push("/signin");
   };
@@ -96,7 +102,7 @@ export function Header() {
                   <Button variant="ghost" className="relative h-8 w-auto flex items-center gap-2">
                      <span className="text-sm font-medium text-muted-foreground hidden sm:inline">Hi, {userName}!</span>
                     <Avatar className="h-8 w-8">
-                        <AvatarFallback>{userName.charAt(0).toUpperCase()}</AvatarFallback>
+                        <AvatarFallback>{userName?.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -105,7 +111,7 @@ export function Header() {
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium leading-none">{userName}</p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        {userName.toLowerCase().replace(' ', '.')}@example.com
+                        {userEmail}
                       </p>
                     </div>
                   </DropdownMenuLabel>

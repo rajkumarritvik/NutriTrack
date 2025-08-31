@@ -54,9 +54,10 @@ export default function SignUpPage() {
         console.log("Sign up values:", values)
         // This is where you'd call your Firebase sign-up function
         
-        // Simulate saving the user's name
+        // Simulate saving the user's name and email
         if (typeof window !== 'undefined') {
           localStorage.setItem('userName', values.name);
+          localStorage.setItem('userEmail', values.email);
         }
 
         toast({
