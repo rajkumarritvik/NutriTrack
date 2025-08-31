@@ -32,8 +32,14 @@ import { useToast } from "@/hooks/use-toast"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { saveUserProfile } from "@/ai/flows/save-user-profile"
 
-const genders = ["Male", "Female", "Prefer not to say"];
-const activityLevels = ["Sedentary", "Lightly Active", "Moderately Active", "Very Active", "Extra Active"];
+const genders = ["Male", "Female", "Prefer not to say"]
+const activityLevels = [
+  "Sedentary",
+  "Lightly Active",
+  "Moderately Active",
+  "Very Active",
+  "Extra Active",
+]
 
 const formSchema = z.object({
   weight: z.coerce.number().positive("Weight must be positive."),
@@ -45,8 +51,8 @@ const formSchema = z.object({
 })
 
 export default function OnboardingPage() {
-    const { toast } = useToast();
-    const router = useRouter();
+  const { toast } = useToast()
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,22 +67,20 @@ export default function OnboardingPage() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Onboarding data:", values)
     try {
-      // In a real app this would be an API call to your backend
-      await saveUserProfile(values);
+      await saveUserProfile(values)
       toast({
         title: "Profile saved!",
         description: "You're all set up. Welcome to NutriTrack!",
-      });
-      router.push("/dashboard");
+      })
+      router.push("/dashboard")
     } catch (error) {
-      console.error("Failed to save profile", error);
+      console.error("Failed to save profile", error)
       toast({
         variant: "destructive",
         title: "Save failed",
         description: "Could not save your profile. Please try again.",
-      });
+      })
     }
   }
 
@@ -84,86 +88,107 @@ export default function OnboardingPage() {
     <div className="flex items-center justify-center py-12 px-4 min-h-[calc(100vh-8rem)]">
       <Card className="w-full max-w-lg">
         <CardHeader>
-          <CardTitle className="text-2xl font-headline">Tell us about yourself</CardTitle>
+          <CardTitle className="text-2xl font-headline">
+            Tell us about yourself
+          </CardTitle>
           <CardDescription>
             This information will help us personalize your nutrition plan.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField
-                        control={form.control}
-                        name="weight"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Weight</FormLabel>
-                            <div className="flex">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-6"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="weight"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Weight</FormLabel>
+                      <div className="flex">
+                        <FormControl>
+                          <Input type="number" placeholder="e.g., 150" {...field} />
+                        </FormControl>
+                        <FormField
+                          control={form.control}
+                          name="weightUnit"
+                          render={({ field: unitField }) => (
+                            <RadioGroup
+                              onValueChange={unitField.onChange}
+                              defaultValue={unitField.value}
+                              className="flex items-center ml-2"
+                            >
+                              <FormItem className="flex items-center space-x-2 space-y-0">
                                 <FormControl>
-                                <Input type="number" placeholder="e.g., 150" {...field} />
+                                  <RadioGroupItem value="lbs" id="lbs" />
                                 </FormControl>
-                                <FormField
-                                    control={form.control}
-                                    name="weightUnit"
-                                    render={({ field: unitField }) => (
-                                        <RadioGroup
-                                            onValueChange={unitField.onChange}
-                                            defaultValue={unitField.value}
-                                            className="flex items-center ml-2"
-                                        >
-                                            <FormItem className="flex items-center space-x-2 space-y-0">
-                                                <FormControl><RadioGroupItem value="lbs" id="lbs" /></FormControl>
-                                                <FormLabel htmlFor="lbs" className="font-normal">lbs</FormLabel>
-                                            </FormItem>
-                                            <FormItem className="flex items-center space-x-2 space-y-0">
-                                                <FormControl><RadioGroupItem value="kg" id="kg" /></FormControl>
-                                                <FormLabel htmlFor="kg" className="font-normal">kg</FormLabel>
-                                            </FormItem>
-                                        </RadioGroup>
-                                    )}
-                                />
-                            </div>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="height"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Height</FormLabel>
-                            <div className="flex">
+                                <FormLabel htmlFor="lbs" className="font-normal">
+                                  lbs
+                                </FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-2 space-y-0">
                                 <FormControl>
-                                <Input type="number" placeholder="e.g., 68" {...field} />
+                                  <RadioGroupItem value="kg" id="kg" />
                                 </FormControl>
-                                 <FormField
-                                    control={form.control}
-                                    name="heightUnit"
-                                    render={({ field: unitField }) => (
-                                        <RadioGroup
-                                            onValueChange={unitField.onChange}
-                                            defaultValue={unitField.value}
-                                            className="flex items-center ml-2"
-                                        >
-                                            <FormItem className="flex items-center space-x-2 space-y-0">
-                                                <FormControl><RadioGroupItem value="in" id="in" /></FormControl>
-                                                <FormLabel htmlFor="in" className="font-normal">in</FormLabel>
-                                            </FormItem>
-                                            <FormItem className="flex items-center space-x-2 space-y-0">
-                                                <FormControl><RadioGroupItem value="cm" id="cm" /></FormControl>
-                                                <FormLabel htmlFor="cm" className="font-normal">cm</FormLabel>
-                                            </FormItem>
-                                        </RadioGroup>
-                                    )}
-                                />
-                            </div>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
+                                <FormLabel htmlFor="kg" className="font-normal">
+                                  kg
+                                </FormLabel>
+                              </FormItem>
+                            </RadioGroup>
+                          )}
+                        />
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="height"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Height</FormLabel>
+                      <div className="flex">
+                        <FormControl>
+                          <Input type="number" placeholder="e.g., 68" {...field} />
+                        </FormControl>
+                        <FormField
+                          control={form.control}
+                          name="heightUnit"
+                          render={({ field: unitField }) => (
+                            <RadioGroup
+                              onValueChange={unitField.onChange}
+                              defaultValue={unitField.value}
+                              className="flex items-center ml-2"
+                            >
+                              <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="in" id="in" />
+                                </FormControl>
+                                <FormLabel htmlFor="in" className="font-normal">
+                                  in
+                                </FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-2 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="cm" id="cm" />
+                                </FormControl>
+                                <FormLabel htmlFor="cm" className="font-normal">
+                                  cm
+                                </FormLabel>
+                              </FormItem>
+                            </RadioGroup>
+                          )}
+                        />
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}
@@ -178,7 +203,11 @@ export default function OnboardingPage() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {genders.map(g => <SelectItem key={g} value={g}>{g}</SelectItem>)}
+                        {genders.map((g) => (
+                          <SelectItem key={g} value={g}>
+                            {g}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -196,10 +225,14 @@ export default function OnboardingPage() {
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select your activity level" />
-                        </S'electTrigger>
+                        </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {activityLevels.map(level => <SelectItem key={level} value={level}>{level}</SelectItem>)}
+                        {activityLevels.map((level) => (
+                          <SelectItem key={level} value={level}>
+                            {level}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

@@ -37,13 +37,19 @@ const weightChange = lastWeight - (weightProgress[0]?.weight || 0);
 
 export default function DashboardPage() {
   const [mealHistory, setMealHistory] = useState<MealEntry[]>([]);
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
     const storedHistory = localStorage.getItem("mealHistory");
     if (storedHistory) {
       setMealHistory(JSON.parse(storedHistory));
     }
   }, []);
+
+  if (!isClient) {
+    return null; // Render nothing on the server
+  }
 
   const today = new Date();
   const startOfCurrentWeek = startOfWeek(today);
@@ -76,9 +82,9 @@ export default function DashboardPage() {
     }), { protein: 0, carbs: 0, fat: 0 });
 
   const macrosData = [
-    { name: "Protein", value: todaysMacros.protein, fill: "var(--color-protein)" },
-    { name: "Carbs", value: todaysMacros.carbs, fill: "var(--color-carbs)" },
-    { name: "Fat", value: todaysMacros.fat, fill: "var(--color-fat)" },
+    { name: "Protein", value: todaysMacros.protein, fill: "hsl(var(--chart-1))" },
+    { name: "Carbs", value: todaysMacros.carbs, fill: "hsl(var(--chart-2))" },
+    { name: "Fat", value: todaysMacros.fat, fill: "hsl(var(--chart-3))" },
   ];
 
   if (mealHistory.length === 0) {
@@ -167,7 +173,7 @@ export default function DashboardPage() {
             <ChartContainer config={pieChartConfig} className="mx-auto aspect-square h-[250px]">
               <RechartsPieChart>
                 <ChartTooltip content={<ChartTooltipContent nameKey="name" hideLabel />} />
-                <RechartsPieChart data={macrosData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5} />
+                <Pie data={macrosData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5} />
               </RechartsPieChart>
             </ChartContainer>
           </CardContent>
