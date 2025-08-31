@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BarChart, BrainCircuit, HeartPulse } from "lucide-react";
+import { ArrowRight, BarChart, BrainCircuit, Check, HeartPulse } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -91,6 +91,49 @@ export default function Home() {
                   <CardDescription>Visualize your journey with intuitive charts for calorie intake, macro distribution, and long-term progress tracking.</CardDescription>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        </section>
+
+        <section className="w-full py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-24">
+              <div className="space-y-6">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl font-headline">How to Get Started</h2>
+                <p className="text-muted-foreground md:text-lg/relaxed">
+                  To access the NutriTrack app, you'll first need to use the Expo Go app. It's a quick process that allows you to start your free health journey right away.
+                </p>
+                <ol className="grid gap-4 list-decimal list-inside">
+                  <li className="text-muted-foreground"><span className="font-semibold text-foreground">Download Expo Go</span> from the App Store or Google Play.</li>
+                  <li className="text-muted-foreground"><span className="font-semibold text-foreground">Sign up for a free account</span> within the Expo Go app.</li>
+                  <li className="text-muted-foreground"><span className="font-semibold text-foreground">Scan the QR code</span> on this page, and NutriTrack will launch instantly inside Expo Go.</li>
+                </ol>
+                <ul className="grid gap-2">
+                    <li className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500" /> Free to download</li>
+                    <li className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500" /> No hidden fees</li>
+                    <li className="flex items-center gap-2"><Check className="h-5 w-5 text-green-500" /> Easy to use</li>
+                </ul>
+                <div className="flex justify-center lg:justify-start">
+                    <Image
+                        src="https://picsum.photos/200/200"
+                        width={200}
+                        height={200}
+                        alt="QR Code"
+                        data-ai-hint="qr code"
+                        className="rounded-lg shadow-md"
+                    />
+                </div>
+              </div>
+              <div className="flex items-center justify-center">
+                 <Image
+                    src="https://picsum.photos/350/700"
+                    width={350}
+                    height={700}
+                    alt="App dashboard on phone"
+                    data-ai-hint="app dashboard"
+                    className="rounded-3xl shadow-2xl"
+                 />
+              </div>
             </div>
           </div>
         </section>
