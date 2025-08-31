@@ -30,8 +30,8 @@ const pieChartConfig: ChartConfig = {
     grams: { label: "Grams" },
     protein: { label: "Protein", color: "hsl(var(--chart-1))" },
     carbs: { label: "Carbs", color: "hsl(var(--chart-2))" },
-    fat: { label: "Fat", color: "hsl(var(--chart-3))" },
-};
+    fat: { label: "Fat", color: "hsl(var(--chart-3))" }
+}
 
 const macrosData = [
     { name: 'Protein', value: macros.protein, fill: 'var(--color-protein)' },
