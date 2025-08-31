@@ -1,12 +1,25 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, Menu } from "lucide-react";
+import { Leaf, Menu, User, Settings, LogOut } from "lucide-react";
+import React, { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
+
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -19,6 +32,26 @@ const navLinks = [
 
 export function Header() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Simulate checking auth state. In a real app, this would be a call to a context or a hook.
+    // We'll consider the user "logged in" if they are on a page other than the auth pages.
+    const authPages = ["/signin", "/signup", "/onboarding"];
+    if (!authPages.includes(pathname) && pathname !== "/") {
+        setIsLoggedIn(true);
+    } else {
+        setIsLoggedIn(false);
+    }
+  }, [pathname]);
+
+  const handleSignOut = () => {
+    // In a real app, you'd call your sign-out logic here.
+    setIsLoggedIn(false);
+    router.push("/signin");
+  };
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -46,10 +79,43 @@ export function Header() {
           </nav>
         </div>
         
-        <div className="flex flex-1 items-center justify-end space-x-2">
-            <Button asChild className="hidden md:flex bg-accent hover:bg-accent/90">
-              <Link href="/signin">Get Started</Link>
-            </Button>
+        <div className="flex flex-1 items-center justify-end space-x-4">
+            {isLoggedIn ? (
+               <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-auto flex items-center gap-2">
+                     <span className="text-sm font-medium text-muted-foreground hidden sm:inline">Hi, User!</span>
+                    <Avatar className="h-8 w-8">
+                        <AvatarFallback>U</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">User</p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        user@example.com
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/settings"><Settings className="mr-2 h-4 w-4" /><span>Settings</span></Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+                <Button asChild className="hidden md:flex bg-accent hover:bg-accent/90">
+                  <Link href="/signin">Get Started</Link>
+                </Button>
+            )}
+           
             <Sheet>
             <SheetTrigger asChild>
                 <Button
