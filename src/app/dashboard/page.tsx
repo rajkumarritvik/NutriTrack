@@ -37,7 +37,7 @@ export default function DashboardPage() {
     { name: 'Fat', value: macros.fat, fill: 'var(--color-fat)' },
   ];
 
-  const noMealsTracked = stats.avgCalories === 0;
+  const noMealsTracked = !stats || stats.avgCalories === 0;
 
   return (
     <div className="container py-12">
@@ -63,8 +63,8 @@ export default function DashboardPage() {
                 <Flame className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">{stats.todaysCalories.toFixed(0)} <span className="text-sm font-normal text-muted-foreground">/ 2500 kcal</span></div>
-                <p className="text-xs text-muted-foreground">{stats.goalComparison.toFixed(2)}% vs weekly avg</p>
+                <div className="text-2xl font-bold">{stats?.todaysCalories?.toFixed(0) || 0} <span className="text-sm font-normal text-muted-foreground">/ 2500 kcal</span></div>
+                <p className="text-xs text-muted-foreground">{stats?.goalComparison?.toFixed(2) || 0}% vs weekly avg</p>
             </CardContent>
         </Card>
         <Card>
@@ -73,8 +73,8 @@ export default function DashboardPage() {
                 <Weight className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">{stats.currentWeight} lbs</div>
-                <p className="text-xs text-muted-foreground">{stats.weightChange} lbs change</p>
+                <div className="text-2xl font-bold">{stats?.currentWeight || 0} lbs</div>
+                <p className="text-xs text-muted-foreground">{stats?.weightChange || 0} lbs change</p>
             </CardContent>
         </Card>
          <Card>
@@ -83,7 +83,7 @@ export default function DashboardPage() {
                 <Target className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">{stats.daysGoalMet}/7 Days Met</div>
+                <div className="text-2xl font-bold">{stats?.daysGoalMet || 0}/7 Days Met</div>
                 <p className="text-xs text-muted-foreground">You're on the right track!</p>
             </CardContent>
         </Card>
