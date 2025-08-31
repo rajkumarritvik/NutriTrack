@@ -60,7 +60,7 @@ export default function SettingsPage() {
       weightUnit: "lbs",
       heightUnit: "in",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Saving settings:", values)
