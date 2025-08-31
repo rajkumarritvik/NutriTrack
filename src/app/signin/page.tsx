@@ -48,24 +48,15 @@ export default function SignInPage() {
     
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log("Sign in values:", values)
-        // This is where you'd call your sign-in function
+        // This is where you'd call your sign-in function.
+        // In a real app, you would verify the password and get user data from a server.
+        // For this prototype, we will just assume the login is successful
+        // and that the user's name is already in local storage from the sign-up process.
         
-        // Simulate retrieving user data and setting it in storage
+        // We just need to make sure the email is set for the header to pick up.
         if (typeof window !== 'undefined') {
-            const storedEmail = localStorage.getItem('userEmail');
-            if (storedEmail === values.email) {
-                const storedName = localStorage.getItem('userName');
-                if (storedName) {
-                    localStorage.setItem('userName', storedName); // Re-set it to be safe
-                }
-            } else {
-                // If the email doesn't match what's in storage, 
-                // we can't know the name. We'll just set the email for now.
-                // In a real app, you'd fetch the name from your backend.
-                localStorage.setItem('userEmail', values.email);
-            }
+            localStorage.setItem('userEmail', values.email);
         }
-
 
         toast({
           title: "Sign in successful!",
