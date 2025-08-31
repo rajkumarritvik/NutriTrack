@@ -13,18 +13,18 @@ const dailyCalories = [
   { day: "Thu", calories: 1900, goal: 2000 },
   { day: "Fri", calories: 2200, goal: 2000 },
   { day: "Sat", calories: 2300, goal: 2000 },
-];
+]
 
 const barChartConfig: ChartConfig = {
   calories: { label: "Calories", color: "hsl(var(--chart-1))" },
   goal: { label: "Goal", color: "hsl(var(--border))" },
-};
+}
 
 const macros = {
     protein: 120,
     carbs: 250,
     fat: 60,
-};
+}
 
 const pieChartConfig: ChartConfig = {
     grams: { label: "Grams" },
@@ -37,7 +37,7 @@ const macrosData = [
     { name: 'Protein', value: macros.protein },
     { name: 'Carbs', value: macros.carbs },
     { name: 'Fat', value: macros.fat },
-];
+]
 
 const weightProgress = [
     { week: 1, weight: 155 },
@@ -46,16 +46,7 @@ const weightProgress = [
     { week: 4, weight: 153 },
     { week: 5, weight: 152 },
     { week: 6, weight: 151 },
-];
-
-const stats = {
-    avgCalories: 2042,
-    goalComparison: 2.1,
-    currentWeight: 151,
-    weightChange: -4,
-    daysGoalMet: 4,
-};
-
+]
 
 export default function DashboardPage() {
 
@@ -73,8 +64,8 @@ export default function DashboardPage() {
                 <Flame className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">{stats.avgCalories.toFixed(0)}</div>
-                <p className="text-xs text-muted-foreground">{stats.goalComparison.toFixed(2)}% vs goal</p>
+                <div className="text-2xl font-bold">2042</div>
+                <p className="text-xs text-muted-foreground">2.1% vs goal</p>
             </CardContent>
         </Card>
         <Card>
@@ -83,8 +74,8 @@ export default function DashboardPage() {
                 <Weight className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">{stats.currentWeight} lbs</div>
-                <p className="text-xs text-muted-foreground">{stats.weightChange} lbs change</p>
+                <div className="text-2xl font-bold">151 lbs</div>
+                <p className="text-xs text-muted-foreground">-4 lbs change</p>
             </CardContent>
         </Card>
          <Card>
@@ -93,7 +84,7 @@ export default function DashboardPage() {
                 <Target className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">{stats.daysGoalMet}/7 Days Met</div>
+                <div className="text-2xl font-bold">4/7 Days Met</div>
                 <p className="text-xs text-muted-foreground">You're on the right track!</p>
             </CardContent>
         </Card>
