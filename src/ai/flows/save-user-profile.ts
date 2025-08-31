@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -7,8 +8,8 @@
  * In a real application, this would interact with a database to store the profile data.
  *
  * - saveUserProfile - A function that takes profile data and "saves" it.
- * - UserProfileInput - The input type for the saveUserProfile function.
- * - UserProfileOutput - The return type for the saveUserProfile function.
+ * - SaveUserProfileInput - The input type for the saveUserProfile function.
+ * - SaveUserProfileOutput - The return type for the saveUserProfile function.
  */
 
 import {ai} from '@/ai/genkit';
@@ -23,13 +24,13 @@ const UserProfileSchema = z.object({
   heightUnit: z.string(),
 });
 
-export const SaveUserProfileInputSchema = z.object({
+const SaveUserProfileInputSchema = z.object({
   profileData: UserProfileSchema.describe("The user's profile data to be saved."),
 });
 
 export type SaveUserProfileInput = z.infer<typeof SaveUserProfileInputSchema>;
 
-export const SaveUserProfileOutputSchema = z.object({
+const SaveUserProfileOutputSchema = z.object({
   success: z.boolean().describe("Whether the profile save was successful."),
   message: z.string().describe("A confirmation message."),
 });
