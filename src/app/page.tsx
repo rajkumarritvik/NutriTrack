@@ -127,7 +127,7 @@ export default function Home() {
               </div>
               <div className="flex items-center justify-center">
                  <Image
-                    src="https://picsum.photos/350/700"
+                    src="https://i.imgur.com/O9uaJkg.png"
                     width={350}
                     height={700}
                     alt="App dashboard on phone"
