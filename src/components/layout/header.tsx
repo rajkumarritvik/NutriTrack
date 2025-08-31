@@ -1,9 +1,8 @@
-
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, Menu, User, LogOut } from "lucide-react";
+import { Leaf, Menu, LogOut } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
@@ -93,37 +92,41 @@ export function Header() {
         </div>
         
         <div className="flex flex-1 items-center justify-end space-x-4">
-            {isClient && isLoggedIn ? (
-               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-auto flex items-center gap-2">
-                     <span className="text-sm font-medium text-muted-foreground hidden sm:inline">Hi, {userName}!</span>
-                    <Avatar className="h-8 w-8">
-                        <AvatarFallback>{userName?.charAt(0).toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{userName}</p>
-                      <p className="text-xs leading-none text-muted-foreground">
-                        {userEmail}
-                      </p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : isClient ? (
-                <Button asChild className="hidden md:flex bg-accent hover:bg-accent/90">
-                  <Link href="/signin">Get Started</Link>
-                </Button>
-            ) : null}
+            {isClient && (
+              <>
+                {isLoggedIn ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="relative h-8 w-auto flex items-center gap-2">
+                        <span className="text-sm font-medium text-muted-foreground hidden sm:inline">Hi, {userName}!</span>
+                        <Avatar className="h-8 w-8">
+                            <AvatarFallback>{userName?.charAt(0).toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56" align="end" forceMount>
+                      <DropdownMenuLabel className="font-normal">
+                        <div className="flex flex-col space-y-1">
+                          <p className="text-sm font-medium leading-none">{userName}</p>
+                          <p className="text-xs leading-none text-muted-foreground">
+                            {userEmail}
+                          </p>
+                        </div>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleSignOut}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Log out</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                    <Button asChild className="hidden md:flex bg-accent hover:bg-accent/90">
+                      <Link href="/signin">Get Started</Link>
+                    </Button>
+                )}
+              </>
+            )}
            
             <Sheet>
             <SheetTrigger asChild>
