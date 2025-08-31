@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
+import { auth } from "@/lib/firebase"
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -85,14 +87,23 @@ export default function SignUpPage() {
         router.push("/onboarding");
     }
 
-    function onGoogleSignIn() {
-        console.log("Signing up with Google");
-        // This is where you'd call your Firebase Google sign-in function
+    async function onGoogleSignIn() {
+      try {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
         toast({
-            title: "Sign up with Google successful!",
-            description: "Redirecting you to the onboarding page...",
+          title: "Sign up with Google successful!",
+          description: "Redirecting you to the onboarding page...",
         });
         router.push("/onboarding");
+      } catch (error) {
+        console.error("Error during Google Sign-Up:", error);
+        toast({
+          variant: "destructive",
+          title: "Google Sign-Up Failed",
+          description: "Could not sign up with Google. Please try again.",
+        });
+      }
     }
 
   return (

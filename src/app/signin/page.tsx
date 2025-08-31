@@ -23,6 +23,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
+import { auth } from "@/lib/firebase"
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -64,6 +67,7 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export default function SignInPage() {
     const { toast } = useToast();
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -82,13 +86,23 @@ export default function SignInPage() {
         });
     }
 
-    function onGoogleSignIn() {
-        console.log("Signing in with Google");
-        // This is where you'd call your Firebase Google sign-in function
+    async function onGoogleSignIn() {
+      try {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
         toast({
             title: "Sign in with Google successful!",
             description: "Redirecting you to the dashboard...",
         });
+        router.push("/dashboard");
+      } catch (error) {
+        console.error("Error during Google Sign-In:", error);
+        toast({
+          variant: "destructive",
+          title: "Google Sign-In Failed",
+          description: "Could not sign in with Google. Please try again.",
+        });
+      }
     }
 
 
