@@ -2,6 +2,7 @@
 "use client"
 
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
@@ -30,6 +31,7 @@ import {
 } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { saveUserProfile } from "@/ai/flows/save-user-profile"
 
 const genders = ["Male", "Female", "Prefer not to say"];
 const activityLevels = ["Sedentary", "Lightly Active", "Moderately Active", "Very Active", "Extra Active"];
@@ -45,6 +47,7 @@ const formSchema = z.object({
 
 export default function OnboardingPage() {
     const { toast } = useToast();
+    const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,13 +61,23 @@ export default function OnboardingPage() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Onboarding data:", values)
-    // This is where you would save the user's profile data
-    toast({
-      title: "Profile saved!",
-      description: "You're all set up. Welcome to NutriTrackGo!",
-    });
+    try {
+      await saveUserProfile({ profileData: values });
+      toast({
+        title: "Profile saved!",
+        description: "You're all set up. Welcome to NutriTrackGo!",
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Failed to save profile", error);
+      toast({
+        variant: "destructive",
+        title: "Save failed",
+        description: "Could not save your profile. Please try again.",
+      });
+    }
   }
 
   return (

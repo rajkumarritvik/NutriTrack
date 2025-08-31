@@ -2,6 +2,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -64,6 +65,7 @@ function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export default function SignUpPage() {
     const { toast } = useToast();
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -80,6 +82,7 @@ export default function SignUpPage() {
           title: "Sign up successful!",
           description: "Redirecting you to the onboarding page...",
         });
+        router.push("/onboarding");
     }
 
     function onGoogleSignIn() {
@@ -89,6 +92,7 @@ export default function SignUpPage() {
             title: "Sign up with Google successful!",
             description: "Redirecting you to the onboarding page...",
         });
+        router.push("/onboarding");
     }
 
   return (
