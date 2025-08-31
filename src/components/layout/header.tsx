@@ -36,38 +36,35 @@ export function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("User");
   const [userEmail, setUserEmail] = useState("user@example.com");
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // Simulate checking auth state. In a real app, this would be a call to a context or a hook.
-    // We'll consider the user "logged in" if they are on a page other than the auth pages.
-    const authPages = ["/signin", "/signup"];
-    if (!authPages.includes(pathname) && pathname !== "/") {
-        setIsLoggedIn(true);
-        if (typeof window !== 'undefined') {
-            const storedName = localStorage.getItem('userName');
-            if (storedName) {
-                setUserName(storedName);
-            }
-            const storedEmail = localStorage.getItem('userEmail');
-            if (storedEmail) {
-                setUserEmail(storedEmail);
-            }
-        }
-    } else {
-        setIsLoggedIn(false);
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (isClient) {
+      const storedName = localStorage.getItem('userName');
+      const storedEmail = localStorage.getItem('userEmail');
+      
+      if (storedEmail) {
+          setIsLoggedIn(true);
+          if (storedName) {
+              setUserName(storedName);
+          }
+          setUserEmail(storedEmail);
+      } else {
+          setIsLoggedIn(false);
+      }
     }
-  }, [pathname]);
+  }, [pathname, isClient]);
 
   const handleSignOut = () => {
-    // In a real app, you'd call your sign-out logic here.
     setIsLoggedIn(false);
-    if (typeof window !== 'undefined') {
-        localStorage.removeItem('userName');
-        localStorage.removeItem('userEmail');
-    }
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
     router.push("/signin");
   };
-
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -96,7 +93,7 @@ export function Header() {
         </div>
         
         <div className="flex flex-1 items-center justify-end space-x-4">
-            {isLoggedIn ? (
+            {isClient && isLoggedIn ? (
                <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-auto flex items-center gap-2">
@@ -122,11 +119,11 @@ export function Header() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : (
+            ) : isClient ? (
                 <Button asChild className="hidden md:flex bg-accent hover:bg-accent/90">
                   <Link href="/signin">Get Started</Link>
                 </Button>
-            )}
+            ) : null}
            
             <Sheet>
             <SheetTrigger asChild>
