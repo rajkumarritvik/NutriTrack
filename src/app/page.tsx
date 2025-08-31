@@ -22,7 +22,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button asChild size="lg" className="bg-accent hover:bg-accent/90">
-                    <Link href="/meal-counter">
+                    <Link href="/signin">
                       Start Tracking
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -107,7 +107,7 @@ export default function Home() {
             </div>
             <div className="mx-auto w-full max-w-sm space-y-2">
               <Button asChild size="lg" className="w-full bg-accent hover:bg-accent/90">
-                <Link href="/meal-counter">
+                <Link href="/signin">
                   Get Started Now
                 </Link>
               </Button>

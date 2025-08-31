@@ -48,7 +48,7 @@ export function Header() {
         
         <div className="flex flex-1 items-center justify-end space-x-2">
             <Button asChild className="hidden md:flex bg-accent hover:bg-accent/90">
-              <Link href="/meal-counter">Get Started</Link>
+              <Link href="/signin">Get Started</Link>
             </Button>
             <Sheet>
             <SheetTrigger asChild>
