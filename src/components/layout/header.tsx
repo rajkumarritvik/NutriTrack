@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, Menu, User, Settings, LogOut } from "lucide-react";
+import { Leaf, Menu, User, LogOut } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
@@ -99,10 +99,6 @@ export function Header() {
                       </p>
                     </div>
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/settings"><Settings className="mr-2 h-4 w-4" /><span>Settings</span></Link>
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
