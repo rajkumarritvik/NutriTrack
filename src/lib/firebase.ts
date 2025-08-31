@@ -1,17 +1,23 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
+import { getAuth, type Auth } from "firebase/auth";
 
 const firebaseConfig = {
-  projectId: "nutritrackgo-nvldr",
-  appId: "1:223092470506:web:49ae84375bd29b43939d93",
-  storageBucket: "nutritrackgo-nvldr.firebasestorage.app",
   apiKey: "AIzaSyBRtns8f4qKFlFXX4_rL_t4fA8h3v3JnP4",
   authDomain: "nutritrackgo-nvldr.firebaseapp.com",
-  messagingSenderId: "223092470506"
+  projectId: "nutritrackgo-nvldr",
+  storageBucket: "nutritrackgo-nvldr.firebasestorage.app",
+  messagingSenderId: "223092470506",
+  appId: "1:223092470506:web:49ae84375bd29b43939d93",
 };
 
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
+let app: FirebaseApp;
+if (getApps().length === 0) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
+
+const auth: Auth = getAuth(app);
 
 export { app, auth };
