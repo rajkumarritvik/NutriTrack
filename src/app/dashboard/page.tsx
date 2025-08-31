@@ -8,17 +8,17 @@ import { Flame, Target, Weight, Zap } from "lucide-react"
 import { DashboardContext } from "@/context/dashboard-context"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
-const barChartConfig = {
+const barChartConfig: ChartConfig = {
   calories: { label: "Calories", color: "hsl(var(--chart-1))" },
   goal: { label: "Goal", color: "hsl(var(--border))" },
-} satisfies ChartConfig;
+};
 
-const pieChartConfig = {
+const pieChartConfig: ChartConfig = {
     grams: { label: "Grams" },
     protein: { label: "Protein", color: "hsl(var(--chart-1))" },
     carbs: { label: "Carbs", color: "hsl(var(--chart-2))" },
     fat: { label: "Fat", color: "hsl(var(--chart-3))" },
-} satisfies ChartConfig;
+};
 
 
 export default function DashboardPage() {
